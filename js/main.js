@@ -321,6 +321,7 @@ class ModernBookShelf {
                 
                 <button data-testid="bookItemDeleteButton" class="btn btn-danger" aria-label="Delete ${book.title}">Delete Book</button>
                 <button data-testid="bookItemEditButton" class="btn btn-edit" aria-label="Edit ${book.title}">Edit Book</button>
+                <button data-testid="bookItemIsCompleteButton" class="btn btn-secondary" aria-label="${toggleButtonText} ${book.title}">${toggleButtonText}</button>
             </div>
         `;
 
@@ -354,9 +355,9 @@ class ModernBookShelf {
         let filteredBooks = this.books;
         if (this.isSearchActive && this.searchQuery) {
             filteredBooks = this.books.filter(book => 
-                book.title.toLowerCase().includes(this.searchQuery) ||
-                book.author.toLowerCase().includes(this.searchQuery)
-            );
+            book.title.toLowerCase().includes(this.searchQuery) ||
+            book.author.toLowerCase().includes(this.searchQuery)
+        );
         }
 
         const incompleteBooks = filteredBooks.filter(book => !book.isComplete);
