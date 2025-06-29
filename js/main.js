@@ -4,6 +4,7 @@ class ModernBookShelf {
         this.currentEditId = null;
         this.currentDeleteId = null;
         this.searchQuery = '';
+        this.isSearchActive = false;
         
         this.init();
     }
@@ -23,9 +24,20 @@ class ModernBookShelf {
         });
 
         // Search functionality
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            this.searchQuery = e.target.value.toLowerCase();
-            this.renderBooks();
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            this.performSearch();
+        });
+
+        document.getElementById('clearSearchBtn').addEventListener('click', () => {
+            this.clearSearch();
+        });
+
+        // Allow Enter key to trigger search
+        document.getElementById('searchInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.performSearch();
+            }
         });
 
         // Edit Modal events
@@ -75,6 +87,60 @@ class ModernBookShelf {
                 this.closeDeleteModal();
             }
         });
+    }
+
+    performSearch() {
+        const searchInput = document.getElementById('searchInput');
+        const query = searchInput.value.trim().toLowerCase();
+        
+        if (query === '') {
+            this.clearSearch();
+            return;
+        }
+
+        this.searchQuery = query;
+        this.isSearchActive = true;
+        this.renderBooks();
+        this.showSearchResults();
+        
+        // Show clear button
+        document.getElementById('clearSearchBtn').style.display = 'block';
+        
+        this.showNotification(`Searching for "${query}"`, 'info');
+    }
+
+    clearSearch() {
+        this.searchQuery = '';
+        this.isSearchActive = false;
+        document.getElementById('searchInput').value = '';
+        document.getElementById('clearSearchBtn').style.display = 'none';
+        document.getElementById('searchResultsInfo').style.display = 'none';
+        this.renderBooks();
+        this.showNotification('Search cleared', 'info');
+    }
+
+    showSearchResults() {
+        const filteredBooks = this.books.filter(book => 
+            book.title.toLowerCase().includes(this.searchQuery) ||
+            book.author.toLowerCase().includes(this.searchQuery)
+        );
+
+        const resultsInfo = document.getElementById('searchResultsInfo');
+        const resultCount = filteredBooks.length;
+        
+        if (resultCount === 0) {
+            resultsInfo.innerHTML = `
+                No books found for "${this.searchQuery}". 
+                <span class="clear-link" onclick="window.bookshelf.clearSearch()">Clear search</span>
+            `;
+        } else {
+            resultsInfo.innerHTML = `
+                Found ${resultCount} book${resultCount === 1 ? '' : 's'} matching "${this.searchQuery}". 
+                <span class="clear-link" onclick="window.bookshelf.clearSearch()">Show all books</span>
+            `;
+        }
+        
+        resultsInfo.style.display = 'block';
     }
 
     generateId() {
@@ -252,9 +318,9 @@ class ModernBookShelf {
             <p data-testid="bookItemAuthor">Author: ${this.escapeHtml(book.author)}</p>
             <p data-testid="bookItemYear">Year: ${book.year}</p>
             <div class="book-item-actions">
+                
                 <button data-testid="bookItemDeleteButton" class="btn btn-danger" aria-label="Delete ${book.title}">Delete Book</button>
                 <button data-testid="bookItemEditButton" class="btn btn-edit" aria-label="Edit ${book.title}">Edit Book</button>
-                <button data-testid="bookItemIsCompleteButton" class="btn btn-secondary" aria-label="${toggleButtonText} ${book.title}">${toggleButtonText}</button>
             </div>
         `;
 
@@ -284,18 +350,24 @@ class ModernBookShelf {
         incompleteShelf.innerHTML = '';
         completedShelf.innerHTML = '';
 
-        // Filter books based on search query
-        const filteredBooks = this.books.filter(book => 
-            book.title.toLowerCase().includes(this.searchQuery) ||
-            book.author.toLowerCase().includes(this.searchQuery)
-        );
+        // Filter books based on search query if search is active
+        let filteredBooks = this.books;
+        if (this.isSearchActive && this.searchQuery) {
+            filteredBooks = this.books.filter(book => 
+                book.title.toLowerCase().includes(this.searchQuery) ||
+                book.author.toLowerCase().includes(this.searchQuery)
+            );
+        }
 
         const incompleteBooks = filteredBooks.filter(book => !book.isComplete);
         const completedBooks = filteredBooks.filter(book => book.isComplete);
 
         // Render incomplete books
         if (incompleteBooks.length === 0) {
-            incompleteShelf.innerHTML = '<div class="empty-shelf">No books in your reading list yet. Add some books to get started!</div>';
+            const emptyMessage = this.isSearchActive ? 
+                'No books to read match your search.' : 
+                'No books in your reading list yet. Add some books to get started!';
+            incompleteShelf.innerHTML = `<div class="empty-shelf">${emptyMessage}</div>`;
         } else {
             incompleteBooks.forEach(book => {
                 incompleteShelf.appendChild(this.createBookElement(book));
@@ -304,7 +376,10 @@ class ModernBookShelf {
 
         // Render completed books
         if (completedBooks.length === 0) {
-            completedShelf.innerHTML = '<div class="empty-shelf">No completed books yet. Start reading to fill this shelf!</div>';
+            const emptyMessage = this.isSearchActive ? 
+                'No completed books match your search.' : 
+                'No completed books yet. Start reading to fill this shelf!';
+            completedShelf.innerHTML = `<div class="empty-shelf">${emptyMessage}</div>`;
         } else {
             completedBooks.forEach(book => {
                 completedShelf.appendChild(this.createBookElement(book));
@@ -363,7 +438,7 @@ class ModernBookShelf {
             top: 20px;
             right: 20px;
             padding: 15px 20px;
-            background: ${type === 'success' ? '#48bb78' : '#667eea'};
+            background: ${type === 'success' ? '#48bb78' : type === 'info' ? '#667eea' : '#f56565'};
             color: white;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);

@@ -163,12 +163,59 @@ main {
     font-size: 1.1rem;
     background: #fff;
     transition: all 0.3s ease;
+    margin-bottom: 15px;
 }
 
 .search-input:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-btn {
+    flex: 1;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.clear-search-btn {
+    padding: 15px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #718096;
+    color: white;
+    box-shadow: 0 4px 15px rgba(113, 128, 150, 0.3);
+    white-space: nowrap;
+}
+
+.clear-search-btn:hover {
+    background: #4a5568;
+    transform: translateY(-2px);
 }
 
 .btn {
@@ -431,6 +478,27 @@ main {
     font-size: 1.1rem;
 }
 
+.search-results-info {
+    background: #e6fffa;
+    border: 1px solid #81e6d9;
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    color: #234e52;
+    font-weight: 500;
+}
+
+.search-results-info .clear-link {
+    color: #319795;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.search-results-info .clear-link:hover {
+    color: #2c7a7b;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 15px;
@@ -473,6 +541,16 @@ main {
 
     .book-item-actions .btn {
         flex: none;
+    }
+
+    .search-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .search-btn,
+    .clear-search-btn {
+        padding: 12px 20px;
     }
 }
 

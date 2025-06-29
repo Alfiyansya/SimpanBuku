@@ -40,38 +40,43 @@
                         <div class="form-grid">
                             <div class="form-group">
                                 <label for="bookTitle">Title</label>
-                                <input type="text" id="bookTitle" name="title" required placeholder="Enter book title" aria-describedby="title-help">
+                                <input type="text" id="bookTitle" name="title" required placeholder="Enter book title" aria-describedby="title-help" required data-testid="bookFormTitleInput">
                             </div>
                             <div class="form-group">
                                 <label for="bookAuthor">Author</label>
-                                <input type="text" id="bookAuthor" name="author" required placeholder="Enter author name" aria-describedby="author-help">
+                                <input type="text" id="bookAuthor" name="author" required placeholder="Enter author name" aria-describedby="author-help" required data-testid="bookFormAuthorInput" >
                             </div>
                             <div class="form-group">
                                 <label for="bookYear">Publication Year</label>
-                                <input type="number" id="bookYear" name="year" required min="1000" max="2100" placeholder="2024" aria-describedby="year-help">
+                                <input type="number" id="bookYear" name="year" required min="1000" max="2100" placeholder="2024" aria-describedby="year-help" required data-testid="bookFormYearInput">
                             </div>
                         </div>
                         <div class="form-actions">
                             <div class="checkbox-group">
-                                <input type="checkbox" id="bookComplete" name="isComplete" aria-describedby="complete-help">
+                                <input type="checkbox" id="bookComplete" name="isComplete" aria-describedby="complete-help" data-testid="bookFormIsCompleteCheckbox">
                                 <label for="bookComplete">Mark as completed</label>
                             </div>
-                            <button type="submit" class="btn btn-primary">Add Book</button>
+                            <button type="submit" class="btn btn-primary" data-testid="bookFormSubmitButton">Add Book</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="search-section">
                     <h2>Search Books</h2>
-                    <label for="searchInput" class="sr-only">Search books by title</label>
-                    <input type="search" id="searchInput" class="search-input" placeholder="Search by title..." aria-label="Search books by title">
+                    <label for="searchInput" class="sr-only">Search books by title or author</label>
+                    <input type="search" id="searchInput" class="search-input" data-testid="searchBookFormTitleInput"  placeholder="Search by title or author..." aria-label="Search books by title or author">
+                    <div id="searchResultsInfo" class="search-results-info" style="display: none;"></div>
+                    <div class="search-actions">
+                        <button type="button" id="searchBtn" class="search-btn" data-testid="searchBookFormSubmitButton">Search</button>
+                        <button type="button" id="clearSearchBtn" class="clear-search-btn" style="display: none;">Clear</button>
+                    </div>
                 </div>
             </section>
 
             <!-- Section 2: Books to Read -->
             <section class="main-section shelf incomplete" aria-labelledby="incomplete-heading">
                 <h2 id="incomplete-heading">📖 Books to Read</h2>
-                <div id="incompleteShelf" class="shelf-content" role="list" aria-label="Books to read">
+                <div id="incompleteShelf" class="shelf-content" data-testid="incompleteBookList" role="list" aria-label="Books to read">
                     <div class="empty-shelf">No books in your reading list yet. Add some books to get started!</div>
                 </div>
             </section>
@@ -79,7 +84,7 @@
             <!-- Section 3: Completed Books -->
             <section class="main-section shelf complete" aria-labelledby="complete-heading">
                 <h2 id="complete-heading">✅ Completed Books</h2>
-                <div id="completedShelf" class="shelf-content" role="list" aria-label="Completed books">
+                <div id="completedShelf" class="shelf-content" data-testid="completeBookList" role="list" aria-label="Completed books">
                     <div class="empty-shelf">No completed books yet. Start reading to fill this shelf!</div>
                 </div>
             </section>
