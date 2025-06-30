@@ -169,6 +169,10 @@ class ModernBookShelf {
             alert('Please enter a valid publication year between 1000 and 2100.');
             return;
         }
+        if (this.books.some(b => b.title.toLowerCase() === book.title.toLowerCase() && b.author.toLowerCase() === book.author.toLowerCase())) {
+            alert('This book already exists in your collection.');
+            return;
+        }
 
         this.books.push(book);
         this.saveBooks();
