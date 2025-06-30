@@ -2,8 +2,14 @@
 
 ![Simpan Buku Banner](https://github.com/Alfiyansya/SimpanBuku/blob/main/images/github-banner.png)
 
+
 **Simpan Buku** is a modern web application designed to help you keep track of your reading journey.  
 Effortlessly manage your personal library—add books you're currently reading, mark books as completed, search your collection, and edit or delete entries, all with a responsive and accessible interface.
+
+
+<a href="https://alfiyansya.github.io/SimpanBuku/" target="_blank" rel="noopener noreferrer">
+  🌐 <b>Try Simpan Buku Online</b>
+</a>
 
 ---
 
